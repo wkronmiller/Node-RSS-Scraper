@@ -1,0 +1,26 @@
+{
+  "name": "rss-scraper",
+  "version": "1.0.0",
+  "description": "RSS Scraper",
+  "main": "src/index.js",
+  "author": "William Rory Kronmiller",
+  "license": "MIT",
+  "scripts": {
+    "start": "babel-node src/index.js",
+    "test": "nodemon --exec babel-node src/index.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.125.0",
+    "boilerpipe": "^0.0.7",
+    "cheerio": "^1.0.0-rc.2",
+    "feedparser": "^2.2.1",
+    "java": "^0.9.0",
+    "request-promise": "^4.2.2",
+    "request-promise-native": "^1.0.5"
+  }
+}
