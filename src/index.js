@@ -4,7 +4,7 @@ import {Feed} from './scraper';
 const config = {
   elasticsearch: {
     indexName: 'rss-feeds',
-    host: 'http://elasticsearch.cloud.kronmiller.net:32000',
+    host: 'http://api.cloud.kronmiller.net:32000',
   },
 };
 
