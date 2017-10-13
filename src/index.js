@@ -55,8 +55,7 @@ const feedList = (function makeFeeds(feedObj) {
 })(feeds);
 
 function indexFeed(feed) {
-  const ready = feed.getItems().then(items => Promise.all(items)).then(items => Promise.all(items.map(index.prepare.bind(index))));
-  return ready.then(() => index.flush())
+  return feed.getItems().then(items => Promise.all(items)).then(items => Promise.all(items.map(index.prepare.bind(index))));
 }
 
-Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error))).then(() => index.close());
+Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error))).then(() => index.flush()).then(() => index.close());

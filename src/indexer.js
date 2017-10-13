@@ -42,10 +42,6 @@ export class Index {
   flush() {
     return new Promise((resolve, reject) => this._redis.lrange(this._indexName, 0, -1, (err, res) => (err) ? reject(err) : resolve(res)))
     .then(items => items.map(JSON.parse))
-    .then(body => {
-      console.log('body', body);
-      return body;
-    })
     .then(body => (body.length > 0) ? this._client.bulk({body}) : null)
     .then(console.log)
     .then(() => new Promise((resolve, reject) => this._redis.del(this._indexName, (err, res) => (err) ? reject(err) : resolve(res))))
