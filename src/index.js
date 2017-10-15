@@ -31,6 +31,15 @@ const feeds = {
     homePage: 'http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml',
     business: 'http://feeds.nytimes.com/nyt/rss/Business',
   },
+  washingtonPost: {
+    national: 'http://feeds.washingtonpost.com/rss/national',
+    world: 'http://feeds.washingtonpost.com/rss/world',
+    business: 'http://feeds.washingtonpost.com/rss/business',
+  },
+  cnn: {
+    top: 'http://rss.cnn.com/rss/cnn_topstories.rss',
+    us: 'http://rss.cnn.com/rss/cnn_us.rss',
+  },
   aviationWeek: {
     space: 'http://awin.aviationweek.com/RssFeed.aspx?rss=true&key=space',
   },
@@ -38,11 +47,20 @@ const feeds = {
     space: 'http://feeds.feedburner.com/defense-news/space',
     congress: 'http://feeds.feedburner.com/defense-news/congress',
     pentagon: 'http://feeds.feedburner.com/defense-news/pentagon',
+    air: 'http://feeds.feedburner.com/defense-news/air',
+  },
+  defenceTalk: {
+    security: 'http://feeds2.feedburner.com/defense-security',
+    technology: 'http://feeds2.feedburner.com/defense-technology',
   },
   theHill: 'http://thehill.com/rss/syndicator/19109',
   wired: {
     topStories: 'https://www.wired.com/feed/rss',
   },
+  hackerNews: {
+    frontPage: 'https://hnrss.org/frontpage',
+  },
+  techCrunch: 'http://feeds.feedburner.com/TechCrunch/',
 };
 
 const cache = (() => {
@@ -72,4 +90,9 @@ function indexFeed(feed) {
   .catch(err => console.error('Failed to prepare feed', feed, err));
 }
 
-Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error))).then(() => index.flush()).then(() => cache.close());
+(function main() {
+  return Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error)))
+    .then(() => index.flush())
+    .catch(err => console.error('Flush failed', err))
+    .then(() => cache.close());
+})()
