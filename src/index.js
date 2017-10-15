@@ -7,6 +7,10 @@ const config = {
   elasticsearch: {
     host: 'http://api.cloud.kronmiller.net:32000',
   },
+  redis: {
+    host: 'localhost',
+    port: 6379,
+  },
 };
 
 const feeds = {
@@ -42,8 +46,8 @@ const feeds = {
 };
 
 const cache = (() => {
-  const {indexName} = config;
-  return new Cache(indexName);
+  const {indexName, redis} = config;
+  return new Cache(indexName, redis);
 })();
 
 const index = (() => {
@@ -65,8 +69,7 @@ const feedList = (function makeFeeds(feedObj) {
 
 function indexFeed(feed) {
   return feed.getItems().then(items => Promise.all(items)).then(items => Promise.all(items.map(index.prepare.bind(index))))
-  .catch(err => console.error('Failed to prepare feed', feed, err))
-  .then(() => console.log('Successfully prepared feed', feed));
+  .catch(err => console.error('Failed to prepare feed', feed, err));
 }
 
 Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error))).then(() => index.flush()).then(() => cache.close());

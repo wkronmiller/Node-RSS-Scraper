@@ -1,9 +1,9 @@
 import redis from 'redis';
 
 export class Cache {
-  constructor(indexName) {
+  constructor(indexName, {host, port}) {
     this._indexName = indexName;
-    this._redis = redis.createClient();
+    this._redis = redis.createClient(port, host);
   }
   addItems(key, values) {
     return new Promise((resolve, reject) => this._redis.lpush(key, values.map(JSON.stringify), (err, res) => (err) ? reject(err): resolve(res)));
