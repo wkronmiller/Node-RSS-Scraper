@@ -5,6 +5,12 @@ function lPush(client, key, values) {
   return new Promise((resolve, reject) => client.lpush(key, values.map(JSON.stringify), (err, res) => (err) ? reject(err): resolve(res)));
 }
 
+class Cache {
+  constructor() {
+    this._redis = redis.createClient():
+  }
+}
+
 export class Index {
   constructor(host, indexName) {
     this._redis = redis.createClient();

@@ -35,6 +35,9 @@ const feeds = {
     pentagon: 'http://feeds.feedburner.com/defense-news/pentagon',
   },
   theHill: 'http://thehill.com/rss/syndicator/19109',
+  wired: {
+    topStories: 'https://www.wired.com/feed/rss',
+  },
 };
 
 const index = (() => {
@@ -55,7 +58,9 @@ const feedList = (function makeFeeds(feedObj) {
 })(feeds);
 
 function indexFeed(feed) {
-  return feed.getItems().then(items => Promise.all(items)).then(items => Promise.all(items.map(index.prepare.bind(index))));
+  return feed.getItems().then(items => Promise.all(items)).then(items => Promise.all(items.map(index.prepare.bind(index))))
+  .catch(err => console.error('Failed to prepare feed', feed, err))
+  .then(() => console.log('Successfully prepared feed', feed));
 }
 
 Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error))).then(() => index.flush()).then(() => index.close());
