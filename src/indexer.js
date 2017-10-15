@@ -10,6 +10,7 @@ export class Index {
     this._indexName = indexName;
   } 
   prepare(body) {
+    if(body === null) { return null; }
     const {url} = body;
     const header = {
       index : {
