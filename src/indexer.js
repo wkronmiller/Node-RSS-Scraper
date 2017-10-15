@@ -27,6 +27,7 @@ export class Index {
     });
   }
   flush() {
+    console.log('Flushing to index');
     return this._cache.getItems()
     .then(items => items.map(JSON.parse))
     .then(body => (body.length > 0) ? this._client.bulk({body}) : null)

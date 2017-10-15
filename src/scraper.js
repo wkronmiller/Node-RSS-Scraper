@@ -28,7 +28,8 @@ function cleanHTML(html) {
 }
 
 export class Feed {
-  constructor(name, url) {
+  constructor(name, url, cache) {
+    this._cache = cache;
     this._name = name;
     this._url = url;
   }
@@ -41,14 +42,17 @@ export class Feed {
       if(rawDescription) {
         descriptionP = cleanHTML(rawDescription);
       } 
-      return scrapeWebPage(url)
-      .catch(err => console.error('URL FAILED', url, err))
-      .then(pageContents => descriptionP.then(description =>
-        ({
-          title, author, url, description, pageContents,
-          pubDate, feedDate,
-        })
-      ));
+      return this._cache.checkSeen(url).then(seen => {
+        if(seen === false) { return null; }
+        return scrapeWebPage(url)
+        .catch(err => console.error('URL FAILED', url, err))
+        .then(pageContents => descriptionP.then(description =>
+          ({
+            title, author, url, description, pageContents,
+            pubDate, feedDate,
+          })
+        ));
+      });
     }));
   }
 }

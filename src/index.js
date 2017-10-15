@@ -56,7 +56,7 @@ const feedList = (function makeFeeds(feedObj) {
     .map(key => {
       const value = feedObj[key];
       if (typeof value === 'string') {
-        return [new Feed(key, value)];
+        return [new Feed(key, value, cache)];
       }
       return makeFeeds(value);
     })
@@ -69,4 +69,4 @@ function indexFeed(feed) {
   .then(() => console.log('Successfully prepared feed', feed));
 }
 
-Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error))).then(() => index.flush()).then(() => index.close());
+Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error))).then(() => index.flush()).then(() => cache.close());

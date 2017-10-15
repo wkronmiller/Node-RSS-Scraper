@@ -13,12 +13,14 @@ export class Cache {
   }
   clearItems() {
     return new Promise((resolve, reject) => this._redis.del(this._indexName, (err, res) => (err) ? reject(err) : resolve(res)));
-
   }
   // Return true if new
   addSeen(key) {
     return new Promise((resolve, reject) => this._redis.sadd(`seen:${this._indexName}`, key, (err, res) => (err) ? reject(err): resolve(res)))
       .then(numChanged => numChanged > 0);
+  }
+  checkSeen(key) {
+    return new Promise((resolve, reject) => this._redis.sismember(`seen:${this._indexName}`, key, (err, res) => (err) ? reject(err): resolve(res))).then(res => res === 1);
   }
   close() {
     this._redis.quit();
