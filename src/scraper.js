@@ -43,7 +43,8 @@ export class Feed {
         descriptionP = cleanHTML(rawDescription);
       } 
       return this._cache.checkSeen(url).then(seen => {
-        if(seen === false) { return null; }
+        if(seen === true) { return null; }
+        console.log('Scraping new page', url);
         return scrapeWebPage(url)
         .catch(err => console.error('URL FAILED', url, err))
         .then(pageContents => descriptionP.then(description =>
