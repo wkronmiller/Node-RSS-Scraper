@@ -1,9 +1,10 @@
 import {Index} from './indexer';
 import {Feed} from './scraper';
+import {Cache} from './cache';
 
 const config = {
+  indexName: 'rss-feeds',
   elasticsearch: {
-    indexName: 'rss-feeds',
     host: 'http://api.cloud.kronmiller.net:32000',
   },
 };
@@ -40,9 +41,14 @@ const feeds = {
   },
 };
 
+const cache = (() => {
+  const {indexName} = config;
+  return new Cache(indexName);
+})();
+
 const index = (() => {
-  const {elasticsearch} = config;
-  return new Index(elasticsearch.host, elasticsearch.indexName);
+  const {elasticsearch, indexName} = config;
+  return new Index(elasticsearch.host, indexName, cache);
 })();
 
 const feedList = (function makeFeeds(feedObj) {
