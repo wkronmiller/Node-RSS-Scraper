@@ -31,6 +31,11 @@ const feeds = {
     homePage: 'http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml',
     business: 'http://feeds.nytimes.com/nyt/rss/Business',
   },
+  miniMania: {
+    recentArticles: 'http://feeds.feedburner.com/minimaniaRecentMINIArticles',
+    newProducts: 'http://feeds.feedburner.com/RecentlyAddedMiniProducts-MiniMania',
+  },
+  northAmericanMotoring: 'http://www.northamericanmotoring.com/forums/external.php',
   washingtonPost: {
     national: 'http://feeds.washingtonpost.com/rss/national',
     world: 'http://feeds.washingtonpost.com/rss/world',
@@ -86,12 +91,15 @@ const feedList = (function makeFeeds(feedObj) {
 })(feeds);
 
 function indexFeed(feed) {
-  return feed.getItems().then(items => Promise.all(items)).then(items => Promise.all(items.map(index.prepare.bind(index))))
+  return feed.getItems()
+  .catch(err => { console.error(err); return []; })
+  .then(items => Promise.all(items)).then(items => Promise.all(items.map(index.prepare.bind(index))))
   .catch(err => console.error('Failed to prepare feed', feed, err));
 }
 
 (function main() {
   return Promise.all(feedList.map(indexFeed).map(p => p.catch(console.error)))
+    .catch(err => console.log('Feed load error', err))
     .then(() => index.flush())
     .catch(err => console.error('Flush failed', err))
     .then(() => cache.close());

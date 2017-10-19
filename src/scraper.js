@@ -19,7 +19,10 @@ function scrapeRss(url) {
       items.push(item); 
     }
   });
-  return new Promise(resolve => stream.on('end', () => resolve(items)));
+  return new Promise(resolve => {
+    stream.on('end', () => resolve(items))
+    stream.on('error', (err) => reject(err));
+  });
 }
 
 function cleanHTML(html) {
@@ -35,6 +38,10 @@ export class Feed {
   }
   getItems() {
     return scrapeRss(this._url)
+    .catch(err => {
+      console.error('Scrape failure', err, this._url);
+      return [];
+    })
     .then(items => items.map(item => {
       const {link: url, title, author, pubDate, date: feedDate} = item;
       const rawDescription = item.description || item.summary;
