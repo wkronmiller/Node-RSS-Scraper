@@ -5,10 +5,10 @@ import {Cache} from './cache';
 const config = {
   indexName: 'rss-feeds',
   elasticsearch: {
-    host: 'http://api.cloud.kronmiller.net:32000',
+    host: 'http://elasticsearch:9200',
   },
   redis: {
-    host: 'localhost',
+    host: 'redis',
     port: 6379,
   },
 };
@@ -35,7 +35,7 @@ const feeds = {
     recentArticles: 'http://feeds.feedburner.com/minimaniaRecentMINIArticles',
     newProducts: 'http://feeds.feedburner.com/RecentlyAddedMiniProducts-MiniMania',
   },
-  northAmericanMotoring: 'http://www.northamericanmotoring.com/forums/external.php',
+  //northAmericanMotoring: 'http://www.northamericanmotoring.com/forums/external.php',
   washingtonPost: {
     national: 'http://feeds.washingtonpost.com/rss/national',
     world: 'http://feeds.washingtonpost.com/rss/world',
